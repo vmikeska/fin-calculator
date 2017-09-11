@@ -4,22 +4,24 @@
 
     <div class="expense-block" *ngFor="let eg of expensesGroups">
 
-        <div class="title">{{eg.category.name}} - €{{eg.total}}</div>
+        <div class="title">{{eg.category.name}} - €{{eg.total}} - (€{{eg.total * 12}})</div>
         <div class="items">
             <table>
                 <tr>
                     <th></th>
                     <th>Name</th>
-                    <th>Amount</th>
+                    <th>Amount monthly</th>
+                    <th>Amount yearly</th>
                     <th>Starts</th>
                     <th>Ends</th>
                 </tr>
                 <tr *ngFor="let item of eg.items" class="item">
                     <td>
-                        <input (change)="expensesListItemSelectionChanged($event, item)" type="checkbox" />
+                        <!-- <input (change)="expensesListItemSelectionChanged($event, item)" type="checkbox" /> -->
                     </td>
                     <td>{{item.name}}</td>
                     <td>{{item.amount}}</td>
+                    <td>{{item.amount * 12}}</td>
 
                     <td>{{!item.start ? '-' : item.start.month + '/' + item.start.year}}</td>
                     <td>{{!item.end ? '-' : item.end.month + '/' + item.end.year}}</td>

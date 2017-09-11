@@ -21,6 +21,8 @@ export class Data {
         { id: 11, name: "Fun" },
         { id: 12, name: "Sports" },
         { id: 13, name: "Health" },
+        { id: 14, name: "Commnunication" },
+        { id: 15, name: "Zoey" },
     ]
 
     public static expenses: ExpenseItem[] = [
@@ -38,15 +40,15 @@ export class Data {
         { id: 12, name: "Dog food", amount: 20, categoryId: 6, important: true },
         { id: 13, name: "Dog doctor", amount: 13, categoryId: 6, important: true },
         { id: 14, name: "Dog tax", amount: 8, categoryId: 6, important: true },
-        { id: 15, name: "TV Tax", amount: 18, categoryId: 7, important: true },
+        { id: 15, name: "TV Tax", amount: 18, categoryId: 8, important: true },
         { id: 16, name: "Netflix", amount: 8, categoryId: 8, important: false },
         { id: 17, name: "Sky", amount: 44, categoryId: 8, important: false, end: { month: 3, year: 2018 } },
         { id: 18, name: "Amazon prime1", amount: 5, categoryId: 8, important: true },
         { id: 18, name: "Amazon music VM", amount: 8, categoryId: 8, important: false },
         { id: 19, name: "Onedrive SM", amount: 2, categoryId: 8, important: true },
         { id: 20, name: "Office 365", amount: 8, categoryId: 3, important: true },
-        { id: 21, name: "Phone VM", amount: 20, categoryId: 8, important: true },
-        { id: 22, name: "Phone SM", amount: 12, categoryId: 8, important: true },
+        { id: 21, name: "Phone VM", amount: 20, categoryId: 14, important: true },
+        { id: 22, name: "Phone SM", amount: 12, categoryId: 14, important: true },
         { id: 23, name: "Domains", amount: 3, categoryId: 3, important: true },
         { id: 24, name: "Email hosting", amount: 11, categoryId: 8, important: true },
         { id: 25, name: "Santander kredit", amount: 64, categoryId: 9, important: true, end: { month: 10, year: 2018 } },
@@ -61,7 +63,7 @@ export class Data {
         { id: 34, name: "Food", amount: 560, categoryId: 10, important: true },
         { id: 35, name: "Drogerie", amount: 30, categoryId: 10, important: true },
         { id: 36, name: "Hairs", amount: 35, categoryId: 10, important: true },
-        { id: 37, name: "Party", amount: 200, categoryId: 11, important: false, personId: 2 },
+        { id: 37, name: "Party", amount: 250, categoryId: 11, important: false, personId: 2 },
         { id: 38, name: "Smoking", amount: 100, categoryId: 11, important: false, personId: 2 },
         { id: 39, name: "Eating out", amount: 160, categoryId: 11, important: false, personId: 2 },
         { id: 40, name: "Presents", amount: 20, categoryId: 7, important: true },
@@ -69,10 +71,12 @@ export class Data {
         { id: 42, name: "Contact lenses", amount: 30, categoryId: 10, important: true },
         { id: 43, name: "Swimming", amount: 25, categoryId: 12, important: true },
         { id: 45, name: "Dog sitting", amount: 25, categoryId: 6, important: true },
-        { id: 46, name: "KITA", amount: 240, categoryId: 10, important: true, personId: 3, start: { month: 11, year: 2017 } },
+        { id: 46, name: "KITA", amount: 240, categoryId: 15, important: true, personId: 3, start: { month: 11, year: 2017 } },
         { id: 47, name: "Post", amount: 10, categoryId: 10, important: true },
         { id: 48, name: "Tooth cleaning", amount: 10, categoryId: 13, important: true, personId: 1 },
         { id: 49, name: "Mortgage", amount: 300, categoryId: 4, important: true },
+        { id: 50, name: "VM Father", amount: 40, categoryId: 9, important: true },
+        { id: 50, name: "Audible", amount: 10, categoryId: 8, important: true },
     ]
 
 }
