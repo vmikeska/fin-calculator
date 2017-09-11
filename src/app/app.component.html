@@ -1,0 +1,25 @@
+<div class="menu">
+
+  <tabs [items]="tabs"></tabs>
+
+
+</div>
+
+
+<div class="tabs-content tiExpensesList">
+  <items-administration></items-administration>
+</div>
+
+<div class="tabs-content tiShareStatistics">
+    
+    <div style="display: block">
+        <canvas baseChart
+                [data]="pieChartData"
+                [labels]="pieChartLabels"
+                [chartType]="pieChartType"
+                (chartHover)="chartHovered($event)"
+                (chartClick)="chartClicked($event)"                
+                ></canvas>
+      </div>
+    
+</div>

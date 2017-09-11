@@ -1,0 +1,79 @@
+@import "style";
+
+
+$tabs-border-color: inherit;
+$item-bck-color: $blue;
+
+$item-active-color: $dark-blue;
+$item-hover-color: $gray;
+
+$collapsable-color: inherit;
+$collapsable-hover: red;
+
+.tabs-component {
+    position: relative;
+    border: 1px solid $tabs-border-color;
+    
+
+    padding-top: 0.2em;
+    padding-bottom: 0.2em;
+    padding-left: 0.5em;
+    padding-right: 2em;
+
+    .item {
+        display: inline-block;
+
+        color: white;
+        background-color: $item-bck-color;
+
+        
+
+        padding: 6px;
+        padding-left: 1em;
+        padding-right: 1em;
+        
+        margin-right: 2px;
+        margin-left: 2px;
+
+        cursor: pointer;
+
+        &.active {
+            color: white;
+            background-color: $item-active-color;
+        }    
+
+        &:hover {
+            color: white;
+            background-color: $item-hover-color;
+        }
+    }
+
+    .collapsable {
+        cursor: pointer;
+        color: $collapsable-color;
+
+        font-size: 1.2em;
+
+        line-height: 2em;
+        vertical-align: middle;
+
+        position: absolute;
+        top: 0;
+        right: 0.5em;
+
+        &:hover {
+            color: $collapsable-hover;
+        }
+    }
+
+}
+
+.tabs-content {    
+        display: none;
+
+        padding: 0.5em;
+
+        &.active {
+            display: block;
+        }
+    }
