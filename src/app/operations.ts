@@ -24,6 +24,15 @@ export class Operations {
         return outGroups
       }
     
+
+      public static splitImportant(items: ExpenseItem[]) {
+        
+        let important = _.filter(items, (i) => {return i.important});
+        let unimportant = _.filter(items, (i) => {return !i.important});
+    
+        return {important: important, unimportant: unimportant};
+      }
+
     
       public static getPriceFromItems(items: ExpenseItem[]) {
         let price = 0;
@@ -39,7 +48,7 @@ export class Operations {
     
         let currentDate: MonthDate = { month: firstDate.month, year: firstDate.year };
     
-        let results = [];
+        let results: MonthlyGroupedExpenses[] = [];
     
         while (this.isDateEarlierOrEqual(currentDate, lastDate)) {
     
