@@ -1,9 +1,10 @@
 
 import { Component, OnInit } from '@angular/core';
-import { MonthDate } from "../data";
+import { MonthDate, Data } from "../data";
 import { Operations } from "../operations";
 
 import * as _ from 'lodash';
+import { IngParser, TransactionType, IngItem } from "../ing-parser";
 
 @Component({
     selector: 'income-expense',
@@ -14,21 +15,63 @@ export class IncomeExpenseComponent implements OnInit {
     constructor() { }
 
     ngOnInit() {
-        let from: MonthDate = { month: 9, year: 2017 };
+        let from: MonthDate = { month: 8, year: 2016 };
         let to: MonthDate = { month: 9, year: 2019 };
 
         let results = Operations.getMonthsResults(from, to);
         
+        //labels
         this.lineChartLabels = _.map(results, (r) => { return `${r.date.month}/${r.date.year}`})
 
-        let expensesData = { data: [], label: 'Expenses' }
+        //expenses
+        let expensesData = { data: [], label: 'Estimated Expenses' }
 
         results.forEach((result) => {
             let total = Operations.getPriceFromItems(result.items);
             expensesData.data.push(total);
         })
 
-        this.lineChartData = [expensesData]
+        
+        //income
+        let incomesData = { data: [], label: 'Estimated Incomes' }
+
+        let incomeResults = Operations.getMonthsIncomeResults(from, to);
+        incomeResults.forEach((incomeResult) => {
+            let totalAmount = _.sumBy(incomeResult.items, "amount");
+            incomesData.data.push(totalAmount);
+        })
+
+        //vaclav
+        let f = [];
+        f = f.concat(Data.sabrinaTransactions);
+        f = f.concat(Data.vaclavTransactions);
+        let vts = <IngItem[]>f;
+
+        let vaclavData = { data: [], label: 'Real Expenses (V+S)' }
+
+        let totalDiscarded = 0;
+
+        let vgs = IngParser.getMonthsResults(vts, from, to);
+        vgs.forEach((vg) => {
+            
+            let expenses = _.filter(vg.items, (i) => {
+                let transTypeOk = [TransactionType.ExpenseAccount, TransactionType.ExpenseCard].includes(i.transactionType); 
+                let nameOk =  !["Sabrina Goersch", "Vaclav Mikeska", "Sabrina Mikeska"].includes(i.account);
+
+                return transTypeOk && nameOk;
+            });
+
+            let hereDiscarded = vg.items.length - expenses.length;
+            totalDiscarded += hereDiscarded;
+
+            let totalAmount = Math.abs( _.sumBy(vg.items, "amount"));
+
+            vaclavData.data.push(totalAmount);
+        })
+
+        console.log("total discarded: " + totalDiscarded);
+
+        this.lineChartData = [expensesData, incomesData, vaclavData];
      }
 
 
@@ -47,25 +90,25 @@ export class IncomeExpenseComponent implements OnInit {
     };
 
     public lineChartColors: Array<any> = [
-        { // grey
-            backgroundColor: 'rgba(148,159,177,0.2)',
-            borderColor: 'rgba(148,159,177,1)',
+        { //expenses
+            backgroundColor: 'rgba(215, 44, 44,0.2)',
+            borderColor: 'red',
             pointBackgroundColor: 'rgba(148,159,177,1)',
             pointBorderColor: '#fff',
             pointHoverBackgroundColor: '#fff',
             pointHoverBorderColor: 'rgba(148,159,177,0.8)'
         },
-        { // dark grey
-            backgroundColor: 'rgba(77,83,96,0.2)',
-            borderColor: 'rgba(77,83,96,1)',
+        { //income
+            backgroundColor: 'rgba(0, 255, 0,0.2)',
+            borderColor: 'green',
             pointBackgroundColor: 'rgba(77,83,96,1)',
             pointBorderColor: '#fff',
             pointHoverBackgroundColor: '#fff',
             pointHoverBorderColor: 'rgba(77,83,96,1)'
         },
-        { // grey
-            backgroundColor: 'rgba(148,159,177,0.2)',
-            borderColor: 'rgba(148,159,177,1)',
+        { // real expenses
+            backgroundColor: 'rgba((45, 141, 251,0.2)',
+            borderColor: 'blue',
             pointBackgroundColor: 'rgba(148,159,177,1)',
             pointBorderColor: '#fff',
             pointHoverBackgroundColor: '#fff',

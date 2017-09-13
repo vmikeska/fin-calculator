@@ -1,0 +1,51 @@
+<div class="real-expenses-list">
+
+    <div></div>
+
+    <table>
+
+        <tr>
+            <th>date</th>
+            <th>total amount</th>
+
+        </tr>
+
+        <tr *ngFor="let g of monthGroups">
+            <td (click)="setActive(g)">{{g.date.month}}/{{g.date.year}}</td>
+            <td>{{g.totalAmount}}</td>
+
+        </tr>
+
+    </table>
+
+    <div *ngIf="included">
+        <div>Included</div>
+        <div>
+            <table>
+                <tr>
+                    <th>amount</th>
+                    <th>account</th>
+                    <th>usage</th>
+                    <th>TranType</th>
+                    <th>paidDate</th>
+                    
+                    <!-- <th>currency</th> -->
+                </tr>
+                <tr *ngFor="let i of included">
+                    <td>{{i.amount}}</td>
+                    <td>{{i.account}}</td>
+                    <td>{{i.usage}}</td>
+                    <td>{{i.transactionType}}</td>
+                    <td>{{mom(i.paidDate).format("l")}}</td>                    
+                    
+                    <!-- <td>{{i.currency}}</td> -->
+                </tr>
+            </table>
+        </div>
+
+    </div>
+
+
+
+
+</div>

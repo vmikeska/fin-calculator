@@ -28,10 +28,12 @@ export class AppComponent implements OnInit {
 
   
   public tabs: TabItem[] = [
+    { id: "tiRealExpenses", name: "Real Expenses" },
     { id: "tiExpensesList", name: "Expenses list" },
     { id: "tiShareStatistics", name: "Share statistics" },    
     { id: "tiIncomeExpense", name: "Income expense" },    
-
+    
+    { id: "tiIngPage", name: "Ing" },    
     
   ];
 

@@ -1,7 +1,7 @@
 
 import * as _ from 'lodash';
 
-import { ExpenseItem, CategoryGroup, MonthDate, MonthlyGroupedExpenses, Data } from "./data";
+import { ExpenseItem, CategoryGroup, MonthDate, MonthlyGroupedExpenses, Data, MonthlyGroupedIncomes } from "./data";
 
 export class Operations {
     public static groupByCategories(items: ExpenseItem[]) {
@@ -68,8 +68,57 @@ export class Operations {
     
         return results;
       }
+
+      public static getMonthsIncomeResults(firstDate: MonthDate, lastDate: MonthDate) {
+        
+            let currentDate: MonthDate = { month: firstDate.month, year: firstDate.year };
+        
+            let results: MonthlyGroupedIncomes[] = [];
+        
+            while (this.isDateEarlierOrEqual(currentDate, lastDate)) {
+        
+              let items = this.getMonthIncome(currentDate);
+        
+              let monthlyResult: MonthlyGroupedIncomes = {
+                date: currentDate,
+                items: items
+              };
+        
+              results.push(monthlyResult);
+        
+              let newMonth = (currentDate.month === 12) ? 1 : currentDate.month + 1;
+              let newYear = (currentDate.month === 12) ? currentDate.year + 1 : currentDate.year;
+              currentDate = { month: newMonth, year: newYear };
+            }
+        
+            return results;
+          }
     
-    
+      public static getMonthIncome(date: MonthDate) {
+        
+            let outItems = [];
+        
+            Data.incomes.forEach((income) => {
+        
+              let permanentPayment = !income.start && !income.end;
+              if (permanentPayment) {
+                outItems.push(income);
+              } else {
+        
+                let hasStarted = !income.start || this.isDateLaterOrEqual(date, income.start);
+                let hasNotFinished = !income.end || this.isDateEarlierOrEqual(date, income.end);
+        
+                if (hasStarted && hasNotFinished) {
+                  outItems.push(income);
+                }
+        
+              }
+        
+            })
+        
+            return outItems;
+          }
+
       public static getMonthItems(date: MonthDate) {
     
         let outItems = [];
@@ -125,6 +174,10 @@ export class Operations {
         }
     
         return false;
+      }
+
+      public static isDateEqual(baseDate: MonthDate, secondDate: MonthDate) {
+        return (baseDate.year === secondDate.year) && (baseDate.month === secondDate.month)    
       }
     
 }

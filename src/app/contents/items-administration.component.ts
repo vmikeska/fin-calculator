@@ -29,7 +29,7 @@ export class ItemsAdministrationComponent implements OnInit {
     
         
     
-        console.log(results);
+        // console.log(results);
       }
 
     public expensesGroups: CategoryGroup[];

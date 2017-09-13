@@ -7,6 +7,8 @@ import { ItemsAdministrationComponent } from "./contents/items-administration.co
 import { TabsComponent } from "./tabs.component";
 import { ShareStatisticsComponent } from "./contents/share-statistics.component";
 import { IncomeExpenseComponent } from "./contents/income-expense.component";
+import { IngPageComponent } from "./contents/ing-page.component";
+import { RealExpensesListComponent } from "./contents/real-expenses-list.component";
 
 @NgModule({
   declarations: [
@@ -14,7 +16,9 @@ import { IncomeExpenseComponent } from "./contents/income-expense.component";
     ItemsAdministrationComponent,
     TabsComponent,
     ShareStatisticsComponent,
-    IncomeExpenseComponent
+    IncomeExpenseComponent,
+    IngPageComponent,
+    RealExpensesListComponent
   ],
   imports: [
     BrowserModule, ChartsModule
