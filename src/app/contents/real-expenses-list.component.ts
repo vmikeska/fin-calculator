@@ -5,6 +5,9 @@ import { MonthDate, Data } from "../data";
 
 import * as _ from 'lodash';
 import * as moment from 'moment';
+import { DataS } from "../dataSabrina";
+import { DataV } from "../dataVaclav";
+import { RealExpensesCalculator, ExpensesGrouper, CategoryGroupedItems } from "../RealExpensesCalculator";
 
 @Component({
     selector: 'real-expenses-list',
@@ -19,62 +22,57 @@ export class RealExpensesListComponent implements OnInit {
     public monthGroups: GroupedItems[] = [];
 
     public included: IngItem[];
-    public excluded: IngItem[];
+    
 
-    ngOnInit() { 
+    public includeSabrina = true;
+    public includeVaclav = true;
+
+    ngOnInit() {
+
+        this.refreshData();
+
+    }
+
+    private refreshData() {
 
         let from: MonthDate = { month: 9, year: 2016 };
         let to: MonthDate = { month: 8, year: 2017 };
 
-        let f = [];
-        f = f.concat(Data.sabrinaTransactions);
-        f = f.concat(Data.vaclavTransactions);
-        let vts = <IngItem[]>f;
+        let res = RealExpensesCalculator.aggregate(from, to, this.includeSabrina, this.includeVaclav);
 
-        let vgs = IngParser.getMonthsResults(vts, from, to);
-        vgs.forEach((vg) => {
+        this.monthGroups = res.monthGroups;
+        this.spentTotal = res.spentTotal;
+        this.spentAvg = res.spentAvg;
+    }
 
-            let expenses = _.filter(vg.items, (i) => {
-                let transTypeOk = [TransactionType.ExpenseAccount, TransactionType.ExpenseCard].includes(i.transactionType);                
-                return transTypeOk;
-            });
 
-            let included: IngItem[] = [];
-            let excluded: IngItem[] = [];
 
-            expenses.forEach((expense) => {
-                let isGood = true;
+    public spentTotal: number;
+    public spentAvg: number;
+    public leftoversTotal: number;
 
-                let innerTransaction =  ["Sabrina Goersch", "Vaclav Mikeska", "Sabrina Mikeska"].includes(expense.account);
-                if (innerTransaction) {
-                    isGood = false;
-                }
+    public expenseGroups: CategoryGroupedItems[] = [];
 
-                if (isGood) {
-                    included.push(expense);
-                } else {
-                    excluded.push(expense);
-                }
-            });
-
-            let totalAmount = Math.round(Math.abs(_.sumBy(included, "amount")));
-
-            let g: GroupedItems = {
-                date: vg.date,
-                excluded: excluded,
-                included: included,
-                totalAmount: totalAmount
-            };
-            
-            this.monthGroups.push(g);
-            
-        });
-
+    public filterChagned() {
+        this.refreshData();
     }
 
     public setActive(g: GroupedItems) {
-        this.excluded = _.sortBy(g.excluded, "amount");
-        this.included = _.sortBy(g.included, "amount");
+
+        let cats = new ExpensesGrouper(g.included);
+        cats.group();
+
+        let cts = _.sortBy(cats.cats, "total").reverse();
+
+        this.expenseGroups = cts;
+
+        this.leftoversTotal = _.sumBy(cats.uncategoriezed, "amount");
+
+        this.included = _.sortBy(cats.uncategoriezed, (i) => {
+            return Math.floor(i.amount)
+        }).reverse();
+
+
     }
 
 }

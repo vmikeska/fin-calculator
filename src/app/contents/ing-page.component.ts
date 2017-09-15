@@ -21,30 +21,30 @@ export class IngPageComponent
             let textItems = IngParser.parseText(text);
             let objItems = IngParser.parseItems(textItems);
 
-            console.log(_.uniq(_.map(textItems, (i) => {return i.transactionText;})));
+            // console.log(_.uniq(_.map(textItems, (i) => {return i.transactionText;})));
 
-            console.log(JSON.stringify(objItems));
+            let jsonStr = JSON.stringify(objItems, null, "\t");
 
-            // let vaclavData = { data: [], label: 'Vaclav Expenses' }
-
-
-            // let from: MonthDate = { month: 8, year: 2016 };
-            // let to: MonthDate = { month: 9, year: 2019 };
-
-            // let vgs = IngParser.getMonthsResults(Data.vaclavTransactions, from, to);
-            // vgs.forEach((vg) => {
-
-            //     let expenses = _.filter(vg.items, (i) => { return [TransactionType.ExpenseAccount, TransactionType.ExpenseCard].includes(i.transactionType); })
-            //     let totalAmount = _.sumBy(vg.items, "amount");
-            //     vaclavData.data.push(totalAmount);
-            // })
-
-
-
-            // console.log(JSON.stringify(vaclavData));
-
+            let cont = document.getElementById("content");
+            cont.innerText = jsonStr;
+            
+            // console.log(jsonStr);
         })
     }
+
+    // private stringify(obj_from_json){
+    //     if(typeof obj_from_json !== "object" || Array.isArray(obj_from_json)){
+    //         // not an object, stringify using native function
+    //         return JSON.stringify(obj_from_json, null, "\t");
+    //     }
+    //     // Implements recursive object serialization according to JSON spec
+    //     // but without quotes around the keys.
+    //     let props = Object
+    //         .keys(obj_from_json)
+    //         .map(key => `${key}:${this.stringify(obj_from_json[key])}`)
+    //         .join(",");
+    //     return `{${props}}`;
+    // }
 
     public newFileLoaded = new Subject<string>();
 

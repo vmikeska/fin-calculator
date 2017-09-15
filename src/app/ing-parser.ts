@@ -25,6 +25,7 @@ export class IngParser {
                 balance: prms[7],
                 balanceCurrency: prms[8],
             };
+
             return obj;
         });
 
@@ -32,10 +33,16 @@ export class IngParser {
         return objs;
     }
 
-    private static replaceText(inText, target, replacer) {
-        let outText = _.replace(inText, new RegExp(target, "g"), replacer);
-        return outText;
-    }
+    private static replaceText(text, search, replacement) {        
+        let prms = text.split(search);
+        let joined = prms.join(replacement);
+        return joined;
+    };
+
+    // private static replaceText(inText, target, replacer) {
+    //     let outText = _.replace(inText, new RegExp(target, "g"), replacer);
+    //     return outText;
+    // }
 
     public static parseItems(items: IngItemOrig[]) {
         let ois = _.map(items, (i) => {
@@ -44,23 +51,51 @@ export class IngParser {
             let monthDate: MonthDate = { month: paidDate.month() + 1, year: paidDate.year() }
             let transType = this.parseTransactionType(i.transactionText);
 
+            if (i.account === "Oliver Melzer") {
+                let a = "a";
+            }
+
             let oi: IngItem = {
                 paidDate: paidDate,
                 accountedDate: moment(i.accountedDate, "DD.MM.YYYY"),
+                
                 date: monthDate,
 
-                account: i.account,
+                account: this.trim(i.account),
+                usage: this.trim(i.usage),
+                balanceCurrency: this.trim(i.balanceCurrency),
+                currency: this.trim(i.currency),
+
                 transactionType: transType,
-                usage: i.usage,
-                amount: Math.abs(parseFloat(this.replaceText(i.amount, ",", "."))),
-                currency: i.currency,
-                balance: Math.abs(parseFloat(this.replaceText(i.balance, ",", "."))),
-                balanceCurrency: i.balanceCurrency
+                
+                amount: this.parseFloat(i.amount),
+                balance: this.parseFloat(i.balance)
             };
             return oi;
         });
 
         return ois;
+    }
+
+    private static parseFloat(txt) {
+        if (!txt) {
+            return 0;
+        }
+
+        let t = this.replaceText(txt, "-", "");
+        t = this.replaceText(t, ".", "");
+        t = this.replaceText(t, ",", ".");
+
+        let float = parseFloat(t);
+        return float;
+    }
+
+    private static trim(txt) {
+        if (!txt) {
+            return null;
+        }
+
+        return txt.trim();
     }
 
     private static parseTransactionType(text) {

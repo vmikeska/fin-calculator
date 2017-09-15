@@ -10,6 +10,8 @@ import { IncomeExpenseComponent } from "./contents/income-expense.component";
 import { IngPageComponent } from "./contents/ing-page.component";
 import { RealExpensesListComponent } from "./contents/real-expenses-list.component";
 
+import { FormsModule } from '@angular/forms';
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -21,7 +23,7 @@ import { RealExpensesListComponent } from "./contents/real-expenses-list.compone
     RealExpensesListComponent
   ],
   imports: [
-    BrowserModule, ChartsModule
+    BrowserModule, FormsModule, ChartsModule
   ],
   providers: [],
   bootstrap: [AppComponent]

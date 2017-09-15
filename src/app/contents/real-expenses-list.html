@@ -1,6 +1,16 @@
 <div class="real-expenses-list">
 
-    <div></div>
+    <div>
+        <label>
+            <input type="checkbox" [(ngModel)]="includeSabrina" (change)="filterChagned()" />
+            Sabrina
+        </label>
+
+        <label>
+            <input type="checkbox" [(ngModel)]="includeVaclav" (change)="filterChagned()" />
+            Vaclav
+        </label>
+    </div>
 
     <table>
 
@@ -18,8 +28,32 @@
 
     </table>
 
+    <div>
+        <div>total: {{spentTotal}}</div>
+        <div>avg: {{spentAvg}}</div>
+    </div>
+
+    <div>
+        <table>
+            <tr>
+                <th>name</th>
+                <th>amount</th>
+            </tr>
+
+            <tr *ngFor="let i of expenseGroups">
+                <td>{{i.catName}}</td>
+                <td>{{i.total}}</td>
+            </tr>
+        </table>
+
+
+    </div>
+
+
     <div *ngIf="included">
-        <div>Included</div>
+        <div>
+            <b>total</b>: {{leftoversTotal}}
+        </div>
         <div>
             <table>
                 <tr>
@@ -28,7 +62,7 @@
                     <th>usage</th>
                     <th>TranType</th>
                     <th>paidDate</th>
-                    
+
                     <!-- <th>currency</th> -->
                 </tr>
                 <tr *ngFor="let i of included">
@@ -36,11 +70,12 @@
                     <td>{{i.account}}</td>
                     <td>{{i.usage}}</td>
                     <td>{{i.transactionType}}</td>
-                    <td>{{mom(i.paidDate).format("l")}}</td>                    
-                    
+                    <td>{{mom(i.paidDate).format("l")}}</td>
+
                     <!-- <td>{{i.currency}}</td> -->
                 </tr>
             </table>
+
         </div>
 
     </div>
