@@ -1,4 +1,20 @@
 
 <input type="file" (change)="readSingleFile($event)" />
 
-<div id="content"></div>
+
+
+
+<div *ngIf="lastLoadedItems">
+
+    <div>Upload to person:</div>
+    <div>
+            <span class="lbtn" (click)="uploadToPerson('sabrina')">Sabrina</span>
+            <br>
+            <br>
+            <br>
+            <span class="lbtn" (click)="uploadToPerson('vaclav')">Vaclav</span>
+    </div>
+
+    
+
+</div>

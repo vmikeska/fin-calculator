@@ -1,0 +1,16 @@
+<table>
+    <tr>
+        <th>amount</th>
+        <th>account</th>
+        <th>usage</th>
+        <th>TranType</th>
+        <th>paidDate</th>
+    </tr>
+    <tr *ngFor="let i of items">
+        <td>{{i.amount}}</td>
+        <td>{{i.account}}</td>
+        <td>{{i.usage}}</td>
+        <td>{{i.transactionType}}</td>
+        <td>{{mom(i.paidDate).format("l")}}</td>
+    </tr>
+</table>

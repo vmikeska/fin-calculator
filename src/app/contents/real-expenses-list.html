@@ -12,28 +12,37 @@
         </label>
     </div>
 
-    <table>
 
-        <tr>
-            <th>date</th>
-            <th>total amount</th>
+    <div class="list1">
 
-        </tr>
+        <table>
 
-        <tr *ngFor="let g of monthGroups">
-            <td (click)="setActive(g)">{{g.date.month}}/{{g.date.year}}</td>
-            <td>{{g.totalAmount}}</td>
+            <tr>
+                <th>date</th>
+                <th>total amount</th>
 
-        </tr>
+            </tr>
 
-    </table>
+            <tr *ngFor="let g of monthGroups">
+                <td>
+                    <a href="#" (click)="setActive(g)">{{g.date.month}}/{{g.date.year}}</a>
 
-    <div>
-        <div>total: {{spentTotal}}</div>
-        <div>avg: {{spentAvg}}</div>
+                </td>
+                <td>{{g.totalAmount}}</td>
+
+            </tr>
+
+        </table>
+
+        <div>
+            <div><b>total</b>: {{spentTotal}}</div>
+            <div><b>avg</b>: {{spentAvg}}</div>
+        </div>
+
+
     </div>
 
-    <div>
+    <div *ngIf="expenseGroups" class="list2">
         <table>
             <tr>
                 <th>name</th>
@@ -41,7 +50,7 @@
             </tr>
 
             <tr *ngFor="let i of expenseGroups">
-                <td>{{i.catName}}</td>
+                <td><a href="#" (click)="showActiveGroupedItems(i)">{{i.catName}}</a></td>
                 <td>{{i.total}}</td>
             </tr>
         </table>
@@ -49,36 +58,25 @@
 
     </div>
 
+    <div *ngIf="groupedItemsDetial" class="list3"> 
+
+            <ing-items-list [items]="groupedItemsDetial"></ing-items-list>  
+
+    </div>
+
 
     <div *ngIf="included">
         <div>
-            <b>total</b>: {{leftoversTotal}}
+            <b>Sum of uncategorizeid</b>: {{leftoversTotal}}
         </div>
         <div>
-            <table>
-                <tr>
-                    <th>amount</th>
-                    <th>account</th>
-                    <th>usage</th>
-                    <th>TranType</th>
-                    <th>paidDate</th>
-
-                    <!-- <th>currency</th> -->
-                </tr>
-                <tr *ngFor="let i of included">
-                    <td>{{i.amount}}</td>
-                    <td>{{i.account}}</td>
-                    <td>{{i.usage}}</td>
-                    <td>{{i.transactionType}}</td>
-                    <td>{{mom(i.paidDate).format("l")}}</td>
-
-                    <!-- <td>{{i.currency}}</td> -->
-                </tr>
-            </table>
-
+            <ing-items-list [items]="included"></ing-items-list>          
         </div>
 
     </div>
+
+
+    
 
 
 

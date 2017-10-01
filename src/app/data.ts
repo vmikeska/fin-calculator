@@ -25,7 +25,17 @@ export class Data {
         { id: 13, name: "Health" },
         { id: 14, name: "Commnunication" },
         { id: 15, name: "Zoey" },
+        { id: 16, name: "Groceries" },
+        { id: 17, name: "Restaurants" },
+        { id: 18, name: "Holidays" },
+        { id: 19, name: "Clothes" },
+        { id: 20, name: "Party" },
+        { id: 21, name: "Cash" },
+        
     ]
+
+    
+    
 
     public static expenses: ExpenseItem[] = [
         { id: 1, name: "Rent", amount: 1148, categoryId: 1, important: true },

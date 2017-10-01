@@ -60,6 +60,29 @@ body {
     }
 }
 
+.real-expenses-list {
+    .list1 {
+         display: inline-block;
+         padding: 1em;
+         border: 3px solid black;
+         vertical-align: top;
+    }
+
+    .list2 {
+        display: inline-block;
+        padding: 1em;
+        border: 3px solid black;
+        vertical-align: top;
+   }
+
+   .list3 {
+    display: inline-block;
+    padding: 1em;
+    border: 3px solid black;
+    vertical-align: top;
+}
+}
+
 
 .lbtn {
     display: inline-block;
@@ -67,4 +90,12 @@ body {
     color: white;
 
     line-height: 2;
+
+    padding-right: 2em;
+    padding-left: 2em;
+    cursor: pointer;
+
+    &:hover {
+        background-color: $blue;
+    }
 }

@@ -17,8 +17,6 @@ import { RealExpensesCalculator, ExpensesGrouper, CategoryGroupedItems } from ".
 export class RealExpensesListComponent implements OnInit {
     constructor() { }
 
-    mom = moment;
-
     public monthGroups: GroupedItems[] = [];
 
     public included: IngItem[];
@@ -53,6 +51,10 @@ export class RealExpensesListComponent implements OnInit {
 
     public expenseGroups: CategoryGroupedItems[] = [];
 
+    public groupedItemsDetial: IngItem[];
+
+
+
     public filterChagned() {
         this.refreshData();
     }
@@ -66,13 +68,17 @@ export class RealExpensesListComponent implements OnInit {
 
         this.expenseGroups = cts;
 
-        this.leftoversTotal = _.sumBy(cats.uncategoriezed, "amount");
+        this.leftoversTotal = Math.floor(_.sumBy(cats.uncategoriezed, "amount"));
 
-        this.included = _.sortBy(cats.uncategoriezed, (i) => {
-            return Math.floor(i.amount)
-        }).reverse();
+        this.included = cats.uncategoriezed;
+         
+        return false;
+    }
 
+    public showActiveGroupedItems(cat: CategoryGroupedItems) {
+        this.groupedItemsDetial = cat.items;
 
+        return false;
     }
 
 }

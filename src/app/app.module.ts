@@ -1,5 +1,6 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
+import { HttpModule } from "@angular/http";
 
 import { AppComponent } from './app.component';
 import { ChartsModule } from "ng2-charts";
@@ -11,6 +12,8 @@ import { IngPageComponent } from "./contents/ing-page.component";
 import { RealExpensesListComponent } from "./contents/real-expenses-list.component";
 
 import { FormsModule } from '@angular/forms';
+import { IngItemsListComponent } from "./ing-items-list.component";
+import { ApiCommService } from './api-comm.service';
 
 @NgModule({
   declarations: [
@@ -20,12 +23,13 @@ import { FormsModule } from '@angular/forms';
     ShareStatisticsComponent,
     IncomeExpenseComponent,
     IngPageComponent,
-    RealExpensesListComponent
+    RealExpensesListComponent,
+    IngItemsListComponent
   ],
   imports: [
-    BrowserModule, FormsModule, ChartsModule
+    BrowserModule, FormsModule, ChartsModule, HttpModule
   ],
-  providers: [],
+  providers: [ApiCommService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

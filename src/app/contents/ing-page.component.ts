@@ -5,6 +5,7 @@ import { IngParser, TransactionType } from "../ing-parser";
 
 import * as _ from 'lodash';
 import { Data, MonthDate } from "../data";
+import { ApiCommService } from '../api-comm.service';
 
 @Component({
     selector: 'ing-page',
@@ -14,41 +15,39 @@ import { Data, MonthDate } from "../data";
 export class IngPageComponent
     implements OnInit {
 
-    constructor() { }
+    constructor(private _apiComm: ApiCommService) { }
 
+    // console.log(_.uniq(_.map(textItems, (i) => {return i.transactionText;})));
     ngOnInit() {
         this.newFileLoaded.subscribe((text) => {
             let textItems = IngParser.parseText(text);
             let objItems = IngParser.parseItems(textItems);
 
-            // console.log(_.uniq(_.map(textItems, (i) => {return i.transactionText;})));
+            this.lastLoadedItems = objItems;
 
-            let jsonStr = JSON.stringify(objItems, null, "\t");
-
-            let cont = document.getElementById("content");
-            cont.innerText = jsonStr;
-            
-            // console.log(jsonStr);
+            //this shows it on the page
+            // let jsonStr = JSON.stringify(objItems, null, "\t");
+            // let cont = document.getElementById("content");
+            // cont.innerText = jsonStr;            
         })
     }
 
-    // private stringify(obj_from_json){
-    //     if(typeof obj_from_json !== "object" || Array.isArray(obj_from_json)){
-    //         // not an object, stringify using native function
-    //         return JSON.stringify(obj_from_json, null, "\t");
-    //     }
-    //     // Implements recursive object serialization according to JSON spec
-    //     // but without quotes around the keys.
-    //     let props = Object
-    //         .keys(obj_from_json)
-    //         .map(key => `${key}:${this.stringify(obj_from_json[key])}`)
-    //         .join(",");
-    //     return `{${props}}`;
-    // }
+    public lastLoadedItems;
+
+    public uploadToPerson(person: string) {
+        //"sabrina"/"vaclav"            
+
+        let res = {
+            person: person,
+            items: this.lastLoadedItems
+        };
+
+        this._apiComm.apiPostAsync("real-expenses", res);
+    }
 
     public newFileLoaded = new Subject<string>();
 
-    private readSingleFile(evt) {
+    public readSingleFile(evt) {
         var f = evt.target.files[0];
 
         if (f) {
