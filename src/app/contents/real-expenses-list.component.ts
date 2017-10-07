@@ -5,8 +5,6 @@ import { MonthDate, Data } from "../data";
 
 import * as _ from 'lodash';
 import * as moment from 'moment';
-import { DataS } from "../dataSabrina";
-import { DataV } from "../dataVaclav";
 import { RealExpensesCalculatorService, CategoryGroupedItems, ExpensesGrouper } from '../real-expenses-calculator.service';
 
 
@@ -24,7 +22,7 @@ export class RealExpensesListComponent implements OnInit {
 
     public monthGroups: GroupedItems[] = [];
 
-    public included: IngItem[];
+    public items: IngItem[];
 
 
     public includeSabrina = true;
@@ -64,7 +62,7 @@ export class RealExpensesListComponent implements OnInit {
 
     public setActive(g: GroupedItems) {
 
-        let cats = new ExpensesGrouper(g.included);
+        let cats = new ExpensesGrouper(g.items);
         cats.group();
 
         let cts = _.sortBy(cats.cats, "total").reverse();
@@ -73,7 +71,7 @@ export class RealExpensesListComponent implements OnInit {
 
         this.leftoversTotal = Math.floor(_.sumBy(cats.uncategoriezed, "amount"));
 
-        this.included = cats.uncategoriezed;
+        this.items = cats.uncategoriezed;
 
         return false;
     }
@@ -88,7 +86,6 @@ export class RealExpensesListComponent implements OnInit {
 
 export class GroupedItems {
     date: MonthDate;
-    included: IngItem[];
-    excluded: IngItem[];
+    items: IngItem[];    
     totalAmount: number;
 }

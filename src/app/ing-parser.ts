@@ -40,7 +40,16 @@ export class IngParser {
     };
 
     public static parseItems(items: IngItemOrig[], personId: number) {
-        let ois = _.map(items, (i) => {
+
+        let validItems = _.reject(items, (i) => {
+            if (!i.amount) {
+                return true;
+            }
+
+            return false;
+        })
+
+        let ois = _.map(validItems, (i) => {
 
             let paidDate = moment(i.paidDate, "DD.MM.YYYY");
             let monthDate: MonthDate = { month: paidDate.month() + 1, year: paidDate.year() }
@@ -96,7 +105,7 @@ export class IngParser {
         if (["Lastschrifteinzug"].includes(text)) {
             return TransactionType.ExpenseCard;
         }
-        if (["Überweisung", "Dauerauftrag/Terminueberweisung", "Abbuchung"].includes(text)) {
+        if (["Abschluss", "Überweisung", "Dauerauftrag/Terminueberweisung", "Abbuchung"].includes(text)) {
             return TransactionType.ExpenseAccount;
         }
 

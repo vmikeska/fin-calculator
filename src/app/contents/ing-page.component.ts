@@ -62,17 +62,8 @@ export class IngPageComponent
                 return true;
             });
 
-            console.log(newItemsToSave);
-
-            console.log("last old")
-            console.log(lastOldDataItem);
-
-            let firstNew = _.minBy(newItemsToSave, "paidDate");
-
-            console.log("first new")
-            console.log(firstNew);
-
             this._expensesDataSvc.postAsync(newItemsToSave);
+            console.log(`added ${newItemsToSave.length} new items`)
         }
     }
 

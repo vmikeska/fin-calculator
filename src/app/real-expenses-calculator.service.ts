@@ -46,8 +46,26 @@ export class RealExpensesCalculatorService {
         items.forEach((i) => {
             let isExpense = [TransactionType.ExpenseAccount, TransactionType.ExpenseCard].includes(i.transactionType);
             let isIncome = i.transactionType === TransactionType.Income;
-            // let isInner = ["Sabrina Goersch", "Vaclav Mikeska", "Sabrina Mikeska"].includes(i.account);
-            let isInner = (i.personId === 1 && i.account === "Vaclav Mikeska") || (i.personId === 2 && i.account === "Sabrina Mikeska") || (i.personId === 2 && i.account === "Sabrina Goersch");
+
+
+            let isInner = false;
+            if (["Sabrina Goersch", "Vaclav Mikeska", "Sabrina Mikeska"].includes(i.account)) {
+                let changeInner = true;
+
+                if (i.usage === "Teilzahlung Darlehen") {
+                    isExpense = true;
+                    changeInner = false;
+                }
+
+                if (i.usage != null && (i.usage.indexOf("Darl.-Leistung 6700386060") != -1)) {
+                    isExpense = true;
+                    changeInner = false;
+                }
+
+                if (changeInner) {
+                    isInner = true
+                }
+            }
 
             if (isInner) {
                 inner.push(i);
@@ -76,67 +94,40 @@ export class RealExpensesCalculatorService {
 
     public aggregate(from: MonthDate, to: MonthDate, includeSabrina: boolean, includeVaclav: boolean) {
         let monthGroups = [];
-        let included = [];
-        let excluded = [];
-
+        
         let allItems = this.getPersonsData(includeSabrina, includeVaclav);
 
         let majorCategories = this.majorSplit(allItems);
-        console.log(majorCategories);
+        
+        console.log("other items");
+        console.log(majorCategories.other);
 
-        let vts = allItems;
+        console.log("inner items");
+        console.log(majorCategories.inner);
+        majorCategories.inner.forEach((i) => {
+            console.log(`${i.account} - ${i.amount} - ${i.usage}`);
+        })
 
-        let vgs = IngParser.getMonthsResults(vts, from, to);
+
+        let vgs = IngParser.getMonthsResults(majorCategories.expenses, from, to);
         vgs.forEach((vg) => {
 
-            let expenses = _.filter(vg.items, (i) => {
-                let transTypeOk = [TransactionType.ExpenseAccount, TransactionType.ExpenseCard].includes(i.transactionType);
-                return transTypeOk;
-            });
-
-            let included: IngItem[] = [];
-            let excluded: IngItem[] = [];
-
-            expenses.forEach((expense) => {
-                let isGood = true;
-
-                let innerTransaction = ["Sabrina Goersch", "Vaclav Mikeska", "Sabrina Mikeska"].includes(expense.account);
-                if (innerTransaction) {
-                    isGood = false;
-                }
-
-                let filterRes = this.filter(expense);
-                if (!filterRes) {
-                    isGood = false;
-                }
-
-                if (isGood) {
-                    included.push(expense);
-                } else {
-                    excluded.push(expense);
-                }
-            });
-
-            let totalAmount = Math.round(Math.abs(_.sumBy(included, "amount")));
+            let totalAmount = Math.round(Math.abs(_.sumBy(vg.items, "amount")));
 
             let g: GroupedItems = {
-                date: vg.date,
-                excluded: excluded,
-                included: included,
+                date: vg.date,                
+                items: vg.items,
                 totalAmount: totalAmount
             };
 
             monthGroups.push(g);
-
         });
 
         let spentTotal = _.sumBy(monthGroups, "totalAmount");
 
         let res = {
             spentTotal: spentTotal,
-            spentAvg: Math.round(spentTotal / vgs.length),
-            included: included,
-            excluded: excluded,
+            spentAvg: Math.round(spentTotal / vgs.length),            
             monthGroups: monthGroups
         };
 

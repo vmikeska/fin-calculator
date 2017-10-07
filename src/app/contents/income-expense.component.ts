@@ -5,8 +5,6 @@ import { Operations } from "../operations";
 
 import * as _ from 'lodash';
 import { IngParser, TransactionType, IngItem } from "../ing-parser";
-import { DataS } from "../dataSabrina";
-import { DataV } from "../dataVaclav";
 import { RealExpensesCalculatorService } from '../real-expenses-calculator.service';
 
 @Component({
