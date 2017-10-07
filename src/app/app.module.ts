@@ -13,9 +13,12 @@ import { RealExpensesListComponent } from "./contents/real-expenses-list.compone
 
 import { FormsModule } from '@angular/forms';
 import { IngItemsListComponent } from "./ing-items-list.component";
-import { ApiCommService } from './api-comm.service';
-import { ExpensesDataService } from './expenses-data.service';
+
 import { RealExpensesCalculatorService } from './real-expenses-calculator.service';
+import { ApiCommService } from './endpoints/api-comm.service';
+import { ExpensesDataService } from './endpoints/expenses-data.service';
+import { FilterCategoryService } from './endpoints/filter-category.service';
+import { ReSettingsComponent } from './contents/re-settings.component';
 
 @NgModule({
   declarations: [
@@ -26,12 +29,13 @@ import { RealExpensesCalculatorService } from './real-expenses-calculator.servic
     IncomeExpenseComponent,
     IngPageComponent,
     RealExpensesListComponent,
-    IngItemsListComponent
+    IngItemsListComponent,
+    ReSettingsComponent
   ],
   imports: [
     BrowserModule, FormsModule, ChartsModule, HttpModule
   ],
-  providers: [ApiCommService, ExpensesDataService, RealExpensesCalculatorService],
+  providers: [ApiCommService, ExpensesDataService, RealExpensesCalculatorService, FilterCategoryService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

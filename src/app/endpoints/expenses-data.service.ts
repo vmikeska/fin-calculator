@@ -1,9 +1,10 @@
 import { Injectable } from '@angular/core';
 import { ApiCommService } from './api-comm.service';
-import { IngItem } from './ing-parser';
+
 
 import * as moment from "moment";
 import * as _ from 'lodash';
+import { IngItem } from '../ing-parser';
 
 @Injectable()
 export class ExpensesDataService {

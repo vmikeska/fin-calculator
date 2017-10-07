@@ -1,0 +1,19 @@
+<div class="cats-filtering">
+
+    <div class="add-new-all">
+
+        
+
+        <select [(ngModel)]="newCfCat">
+            <option *ngFor="let cat of cats" [ngValue]="cat.idInt">{{cat.name}}</option>                
+        </select>
+
+        <input type="text" [(ngModel)]="newCfValue" placeholder="value" />
+
+        <input type="text" [(ngModel)]="newCfProp" value="account" placeholder="prop name" />
+
+        <span class="lbtn" (click)="newCatFilterClick()">create</span>
+
+    </div>
+
+</div>

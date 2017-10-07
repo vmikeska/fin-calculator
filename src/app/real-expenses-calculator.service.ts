@@ -5,8 +5,9 @@ import { MonthDate, CategoryItem, Data } from "./data";
 import * as _ from 'lodash';
 import * as moment from 'moment';
 import { Injectable } from "@angular/core";
-import { ExpensesDataService } from "./expenses-data.service";
+
 import { Subject } from "rxjs/Subject";
+import { ExpensesDataService } from "./endpoints/expenses-data.service";
 
 @Injectable()
 export class RealExpensesCalculatorService {
@@ -134,38 +135,38 @@ export class RealExpensesCalculatorService {
         return res;
     }
 
-    private filter(item: IngItem) {
+    // private filter(item: IngItem) {
 
-        if (item.account === "hcc fuer fa offenbach am main") {
-            return false;
-        }
+    //     if (item.account === "hcc fuer fa offenbach am main") {
+    //         return false;
+    //     }
 
-        if (item.account === "Techniker Krankenkasse") {
-            return false;
-        }
+    //     if (item.account === "Techniker Krankenkasse") {
+    //         return false;
+    //     }
 
-        if (item.account === "Oliver Melzer") {
-            return false;
-        }
+    //     if (item.account === "Oliver Melzer") {
+    //         return false;
+    //     }
 
-        if (item.account === "Christopher Albrecht") {
-            return false;
-        }
+    //     if (item.account === "Christopher Albrecht") {
+    //         return false;
+    //     }
 
-        if (item.account === "PIERLUIGI NICOLELLA") {
-            return false;
-        }
+    //     if (item.account === "PIERLUIGI NICOLELLA") {
+    //         return false;
+    //     }
 
-        if (item.account === "Jessica Carraro") {
-            return false;
-        }
+    //     if (item.account === "Jessica Carraro") {
+    //         return false;
+    //     }
 
-        if (item.account === "Finanzamt Offenbach am Main II") {
-            return false;
-        }
+    //     if (item.account === "Finanzamt Offenbach am Main II") {
+    //         return false;
+    //     }
 
-        return true;
-    }
+    //     return true;
+    // }
 }
 
 export class ExpensesGrouper {
@@ -201,7 +202,7 @@ export class ExpensesGrouper {
         let c = _.find(this.cats, (ca) => { return ca.categoryId === categoryId });
         if (!c) {
 
-            let cat = _.find(Data.cats, { id: categoryId });
+            let cat = _.find(Data.cats, { idInt: categoryId });
 
             let caa = new CategoryGroupedItems(); {
                 caa.catName = cat.name,
@@ -238,21 +239,22 @@ export class FilterMatch {
 
         if (found === null) {
 
-            this.categoryRules.forEach((catRule) => {
+            //todo: reactivate
+            // this.categoryRules.forEach((catRule) => {
 
-                _.forEach(catRule.rules, (rule) => {
+            //     _.forEach(catRule.rules, (rule) => {
 
-                    if (rule.contains) {
-                        let str = item[rule.propName];
-                        if (this.contains(str, rule.contains)) {
-                            found = catRule.categoryId;
-                            return false;
-                        }
-                    }
+            //         if (rule.contains) {
+            //             let str = item[rule.propName];
+            //             if (this.contains(str, rule.contains)) {
+            //                 found = catRule.categoryId;
+            //                 return false;
+            //             }
+            //         }
 
-                })
+            //     })
 
-            });
+            // });
         }
 
         return found;
@@ -270,16 +272,8 @@ export class FilterMatch {
         ["NR7153322028 ANTWERPEN BE KAUFUMSATZ 22.07 140511", 18],
         ["Wie besprochen", 0],
         ["NR7153322028 FRANKFURT KAUFUMSATZ 25.08 093447", 21],
-        // ["", 20],
-        // ["", 20],
-        // ["", 20],
-        // ["", 20],
+      
     ];
-
-    // { id: 20, name: "Party" },
-    // { id: 18, name: "Holidays" },
-    // { id: 17, name: "Restaurants" },
-    // { id: 15, name: "Zoey" },
 
     public static oneTimeId(item: IngItem) {
         let catId = null;
@@ -297,580 +291,10 @@ export class FilterMatch {
     }
 
 
-    public static categoryRules: FilterRule[] = [
-        //Flat OF
-        {
-            categoryId: 1,
-            rules: [
-                {
-                    propName: "account",
-                    contains: "ABG FRANKFURT HOLDING"
-                },
-                {
-                    propName: "account",
-                    contains: "PROENGENO GmbH + Co. KG"
-                }
-            ]
-
-        },
-        //Car
-        {
-            categoryId: 2,
-            rules: [
-                {
-                    propName: "account",
-                    contains: "tanken"
-                },
-                {
-                    propName: "account",
-                    contains: "shell"
-                },
-                {
-                    propName: "account",
-                    contains: "CS PHM"
-                },
-                {
-                    propName: "account",
-                    contains: "SB-TANK"
-                },
-                {
-                    propName: "account",
-                    contains: "MR. WASH AUTOSERVICE AG"
-                },
-                {
-                    propName: "account",
-                    contains: "aral"
-                },
-                {
-                    propName: "account",
-                    contains: "esso"
-                },
-                {
-                    propName: "account",
-                    contains: "TANKSTELLEN"
-                },
-                {
-                    propName: "account",
-                    contains: "TOTAL DEUTSCHLAND"
-                },
-                {
-                    propName: "account",
-                    contains: "agip"
-                },
-                {
-                    propName: "account",
-                    contains: "RP AUTO"
-                },
-                {
-                    propName: "account",
-                    contains: "PAP OIL"
-                },
-                {
-                    propName: "account",
-                    contains: "ADAC"
-                },
-
-
-            ]
-
-
-        },
-        //Work
-        {
-            categoryId: 3,
-            rules: [
-                {
-                    propName: "account",
-                    contains: "MICROSOFT"
-                },
-                {
-                    propName: "account",
-                    contains: "JETBRAIN"
-                },
-                {
-                    propName: "account",
-                    contains: "mlab"
-                },
-                {
-                    propName: "account",
-                    contains: "Kabelfernsehen Muenchen"
-                },
-            ]
-
-        },
-        //Flat Bieber
-        {
-            categoryId: 4,
-            rules: [
-                {
-                    propName: "account",
-                    contains: "VR Bank Main-Kinzig-Buedingen eG"
-                },
-                {
-                    propName: "account",
-                    contains: "Gemeinde Biebergemund Gemeindekasse"
-                },
-                {
-                    propName: "account",
-                    contains: "WEG Fried.Krupp.Str"
-                },
-                {
-                    propName: "account",
-                    contains: "Detlef Niesser"
-                },
-
-
-            ]
-
-        },
-        //Insurance
-        {
-            categoryId: 5,
-            rules: [
-                {
-                    propName: "account",
-                    contains: "VOLKSWOHL BUND Lebensversicherung a.G"
-                },
-                {
-                    propName: "account",
-                    contains: "ALTE LEIPZIGER LEBEN"
-                },
-            ]
-
-        },
-        //Dog
-        {
-            categoryId: 6,
-            rules: [
-                {
-                    propName: "usage",
-                    contains: "HUNDESTEUER"
-                }
-            ]
-
-        },
-        //Other
-        {
-            categoryId: 7,
-            rules: [
-                {
-                    propName: "xxxx",
-                    contains: "xxxx"
-                }
-            ]
-        },
-        //Multimedia
-        {
-            categoryId: 8,
-            rules: [
-                {
-                    propName: "usage",
-                    contains: "netflix"
-                },
-                {
-                    propName: "account",
-                    contains: "audible"
-                },
-                {
-                    propName: "account",
-                    contains: "SKY DEUTSCHLAND"
-                },
-                {
-                    propName: "usage",
-                    contains: "PP.3981.PP . MICROSOFT, Ihr Einkauf bei MICROSOFT"
-                },
-                {
-                    propName: "account",
-                    contains: "Rundfunk ARD, ZDF, DRadio"
-                },
-
-
-
-
-            ]
-
-        },
-        //Debts
-        {
-            categoryId: 9,
-            rules: [
-                {
-                    propName: "account",
-                    contains: "Santander Consumer Bank"
-                }
-
-
-            ]
-        },
-        //Elementary needs
-        {
-            categoryId: 10,
-            rules: [
-                {
-                    propName: "account",
-                    contains: "321LINSEN"
-                },
-                {
-                    propName: "account",
-                    contains: "KADERNICTVI"
-                },
-                {
-                    propName: "account",
-                    contains: "haar"
-                },
-                {
-                    propName: "usage",
-                    contains: "DP AG"
-                },
-                {
-                    propName: "account",
-                    contains: "ikea"
-                },
-                {
-                    propName: "account",
-                    contains: "AMAZON"
-                },
-
-
-            ]
-
-        },
-        //Fun
-        {
-            categoryId: 11,
-            rules: [
-                {
-                    propName: "account",
-                    contains: "ERLEBNISPARK"
-                }
-
-            ]
-
-        },
-        //Sports
-        {
-            categoryId: 12,
-            rules: [
-                {
-                    propName: "account",
-                    contains: "purfitness Obertshausen GmbH"
-                },
-                {
-                    propName: "account",
-                    contains: "FITNESS FIRST GERMANY GMBH"
-                },
-                {
-                    propName: "account",
-                    contains: "Sportgemeinschaft Wiking 1903 e.V."
-                },
-            ]
-
-        },
-        //Health
-        {
-            categoryId: 13,
-            rules: [
-                {
-                    propName: "account",
-                    contains: "LEKARNA"
-                },
-                {
-                    propName: "account",
-                    contains: "APOTHEKE"
-                },
-                {
-                    propName: "account",
-                    contains: "Dr. med. dent. B. Graml"
-                },
-
-
-
-            ]
-
-        },
-        //Commnunication
-        {
-            categoryId: 14,
-            rules: [
-                {
-                    propName: "account",
-                    contains: "Klarmobil GmbH"
-                }
-            ]
-
-        },
-        //Zoey
-        {
-            categoryId: 15,
-            rules: [
-                {
-                    propName: "usage",
-                    contains: "baby"
-                },
-                {
-                    propName: "usage",
-                    contains: "Mamikreisel"
-                },
-                {
-                    propName: "account",
-                    contains: "baby"
-                },
-                {
-                    propName: "account",
-                    contains: "MONTE MARE SAGT DANKE"
-                },
-
-
-
-            ]
-        },
-        //Groceries
-        {
-            categoryId: 16,
-            rules: [
-                {
-                    propName: "account",
-                    contains: "ALBERT"
-                },
-                {
-                    propName: "account",
-                    contains: "TEGUT"
-                },
-                {
-                    propName: "account",
-                    contains: "REWE"
-                },
-                {
-                    propName: "account",
-                    contains: "ALDI"
-                },
-                {
-                    propName: "account",
-                    contains: "LIDL"
-                },
-                {
-                    propName: "account",
-                    contains: "DROGERIE"
-                },
-                {
-                    propName: "account",
-                    contains: "DROGERIE"
-                },
-                {
-                    propName: "usage",
-                    contains: "CROWDBUTCHI"
-                },
-
-
-
-
-            ]
-        },
-        //restaurants
-        {
-            categoryId: 17,
-            rules: [
-                {
-                    propName: "account",
-                    contains: "vapiano"
-                },
-                {
-                    propName: "account",
-                    contains: "LOSTERIA"
-                },
-                {
-                    propName: "account",
-                    contains: "BAGETERIE"
-                },
-                {
-                    propName: "account",
-                    contains: "restaurant"
-                },
-                {
-                    propName: "account",
-                    contains: "RASTHAUS"
-                },
-                {
-                    propName: "account",
-                    contains: "KFC"
-                },
-                {
-                    propName: "account",
-                    contains: "STAROBRNO"
-                },
-                {
-                    propName: "account",
-                    contains: "RESTAURACE"
-                },
-                {
-                    propName: "account",
-                    contains: "BURGER"
-                },
-                {
-                    propName: "account",
-                    contains: "RISTORANTE"
-                },
-                {
-                    propName: "account",
-                    contains: "BRAUHAUS"
-                },
-                {
-                    propName: "account",
-                    contains: "MCDONALD"
-                },
-
-
-            ]
-        },
-        //Holidays
-        {
-            categoryId: 18,
-            rules: [
-                {
-                    propName: "account",
-                    contains: "HOTEL"
-                },
-                {
-                    propName: "account",
-                    contains: "ZOO"
-                },
-                {
-                    propName: "usage",
-                    contains: "EXPEDIA"
-                },
-                {
-                    propName: "account",
-                    contains: "HOLIDAY INN"
-                },
-                {
-                    propName: "account",
-                    contains: "LUFTHANSA"
-                },
-                {
-                    propName: "usage",
-                    contains: "RYANAIR"
-                },
-                {
-                    propName: "usage",
-                    contains: "BOOKING.COM"
-                },
-                {
-                    propName: "usage",
-                    contains: "amoma"
-                },
-                {
-                    propName: "usage",
-                    contains: "WECHSELKURSGEBUEHR"
-                },
-                {
-                    propName: "account",
-                    contains: "DB Vertrieb GmbH"
-                },
-
-
-
-
-
-
-            ]
-
-
-        },
-        //Clothes
-        {
-            categoryId: 16,
-            rules: [
-                {
-                    propName: "usage",
-                    contains: "ABOUTYOUGMB"
-                },
-                {
-                    propName: "account",
-                    contains: "BIJOU BRIGITTE"
-                },
-                {
-                    propName: "account",
-                    contains: "DEICHMANN"
-                },
-                {
-                    propName: "account",
-                    contains: "PEEK CLOPPENBURG"
-                },
-                {
-                    propName: "account",
-                    contains: "Zalando"
-                },
-                {
-                    propName: "account",
-                    contains: "otto"
-                },
-                {
-                    propName: "account",
-                    contains: "VISA RESERVED"
-                },
-                {
-                    propName: "account",
-                    contains: "PANE E VINO"
-                },
-
-
-            ]
-
-        },
-        //Party
-        {
-            categoryId: 20,
-            rules: [
-                {
-                    propName: "account",
-                    contains: "MYTAXI"
-                },
-                {
-                    propName: "account",
-                    contains: "UBER"
-                },
-                {
-                    propName: "account",
-                    contains: "DB RENT GMBH"
-                },
-                {
-                    propName: "account",
-                    contains: "IQOS"
-                }
-            ]
-
-        },
-        //Cash
-        {
-            categoryId: 21,
-            rules: [
-                {
-                    propName: "usage",
-                    contains: "BARGELDAUSZAHLUNG"
-                },
-
-
-            ]
-
-        },
-
-
-
-    ]
+   
 
 }
 
-export class FilterRule {
-    public categoryId: number;
-    public rules: PropertyRule[];
-}
-
-
-
-export class PropertyRule {
-    public propName: string;
-    public contains: string;
-}
 
 export class CategoryGroupedItems {
     public catName: string;

@@ -5,7 +5,8 @@ import { IngParser, TransactionType, IngItem } from "../ing-parser";
 
 import * as _ from 'lodash';
 import { Data, MonthDate } from "../data";
-import { ExpensesDataService } from '../expenses-data.service';
+import { ExpensesDataService } from '../endpoints/expenses-data.service';
+
 
 @Component({
     selector: 'ing-page',

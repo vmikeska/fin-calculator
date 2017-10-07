@@ -11,7 +11,7 @@ export class Operations {
     
         _.forOwn(groups, (items, catId) => {
           let catIdInt = parseInt(catId);
-          let cat = _.find(Data.cats, {id: catIdInt});
+          let cat = _.find(Data.cats, {idInt: catIdInt});
           let outGroup: CategoryGroup = {
             category: cat,
             items: items,

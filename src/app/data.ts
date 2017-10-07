@@ -10,27 +10,27 @@ export class Data {
     ];
 
     public static cats: CategoryItem[] = [
-        { id: 1, name: "Flat OF" },
-        { id: 2, name: "Car" },
-        { id: 3, name: "Work" },
-        { id: 4, name: "Flat Bieber" },
-        { id: 5, name: "Insurance" },
-        { id: 6, name: "Dog" },
-        { id: 7, name: "Other" },
-        { id: 8, name: "Multimedia" },
-        { id: 9, name: "Debts" },
-        { id: 10, name: "Elementary needs" },
-        { id: 11, name: "Fun" },
-        { id: 12, name: "Sports" },
-        { id: 13, name: "Health" },
-        { id: 14, name: "Commnunication" },
-        { id: 15, name: "Zoey" },
-        { id: 16, name: "Groceries" },
-        { id: 17, name: "Restaurants" },
-        { id: 18, name: "Holidays" },
-        { id: 19, name: "Clothes" },
-        { id: 20, name: "Party" },
-        { id: 21, name: "Cash" },
+        { idInt: 1, name: "Flat OF" },
+        { idInt: 2, name: "Car" },
+        { idInt: 3, name: "Work" },
+        { idInt: 4, name: "Flat Bieber" },
+        { idInt: 5, name: "Insurance" },
+        { idInt: 6, name: "Dog" },
+        { idInt: 7, name: "Other" },
+        { idInt: 8, name: "Multimedia" },
+        { idInt: 9, name: "Debts" },
+        { idInt: 10, name: "Elementary needs" },
+        { idInt: 11, name: "Fun" },
+        { idInt: 12, name: "Sports" },
+        { idInt: 13, name: "Health" },
+        { idInt: 14, name: "Commnunication" },
+        { idInt: 15, name: "Zoey" },
+        { idInt: 16, name: "Groceries" },
+        { idInt: 17, name: "Restaurants" },
+        { idInt: 18, name: "Holidays" },
+        { idInt: 19, name: "Clothes" },
+        { idInt: 20, name: "Party" },
+        { idInt: 21, name: "Cash" },
         
     ]
 
@@ -130,7 +130,7 @@ export class CategoryGroup {
  
  
  export class CategoryItem {
-   id: number;
+    idInt: number;
    name: string;
    mainCategoryId?: number;
  }
