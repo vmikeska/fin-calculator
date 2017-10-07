@@ -14,6 +14,8 @@ import { RealExpensesListComponent } from "./contents/real-expenses-list.compone
 import { FormsModule } from '@angular/forms';
 import { IngItemsListComponent } from "./ing-items-list.component";
 import { ApiCommService } from './api-comm.service';
+import { ExpensesDataService } from './expenses-data.service';
+import { RealExpensesCalculatorService } from './real-expenses-calculator.service';
 
 @NgModule({
   declarations: [
@@ -29,7 +31,7 @@ import { ApiCommService } from './api-comm.service';
   imports: [
     BrowserModule, FormsModule, ChartsModule, HttpModule
   ],
-  providers: [ApiCommService],
+  providers: [ApiCommService, ExpensesDataService, RealExpensesCalculatorService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

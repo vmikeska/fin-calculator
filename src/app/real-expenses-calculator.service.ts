@@ -1,35 +1,90 @@
 import { IngItem, IngParser, TransactionType } from "./ing-parser";
 import { GroupedItems } from "./contents/real-expenses-list.component";
 import { MonthDate, CategoryItem, Data } from "./data";
-import { DataS } from "./dataSabrina";
-import { DataV } from "./dataVaclav";
 
 import * as _ from 'lodash';
 import * as moment from 'moment';
+import { Injectable } from "@angular/core";
+import { ExpensesDataService } from "./expenses-data.service";
+import { Subject } from "rxjs/Subject";
 
-export class RealExpensesCalculator {
+@Injectable()
+export class RealExpensesCalculatorService {
 
-    public static itemsToCategories(items: IngItem[]) {
+    constructor(private _expensesDataSvc: ExpensesDataService) {
 
-        items.forEach((i) => {
-
-        })
     }
 
-    public static aggregate(from: MonthDate, to: MonthDate, includeSabrina: boolean, includeVaclav: boolean) {
+    public onDataLoaded = new Subject();
+
+    public get dataSabrina() {
+        return this.getDataByPersonId(1);
+    }
+
+    public get dataVaclav() {
+        return this.getDataByPersonId(2);
+    }
+
+    private getDataByPersonId(pid: number) {
+        let items = _.filter(this.allExpenses, { personId: pid });
+        return items;
+    }
+
+    public allExpenses: IngItem[];
+
+    public async loadDataAsync() {
+        this.allExpenses = await this._expensesDataSvc.getAllAsync();
+        this.onDataLoaded.next();
+    }
+
+    public majorSplit(items: IngItem[]) {
+        let expenses: IngItem[] = [];
+        let incomes: IngItem[] = [];
+        let inner: IngItem[] = [];
+        let other: IngItem[] = [];
+
+        items.forEach((i) => {
+            let isExpense = [TransactionType.ExpenseAccount, TransactionType.ExpenseCard].includes(i.transactionType);
+            let isIncome = i.transactionType === TransactionType.Income;
+            // let isInner = ["Sabrina Goersch", "Vaclav Mikeska", "Sabrina Mikeska"].includes(i.account);
+            let isInner = (i.personId === 1 && i.account === "Vaclav Mikeska") || (i.personId === 2 && i.account === "Sabrina Mikeska") || (i.personId === 2 && i.account === "Sabrina Goersch");
+
+            if (isInner) {
+                inner.push(i);
+            } else if (isExpense) {
+                expenses.push(i);
+            } else if (isIncome) {
+                incomes.push(i);
+            } else {
+                other.push(i);
+            }
+        })
+
+        return { expenses, incomes, inner, other };
+    }
+
+    private getPersonsData(includeSabrina: boolean, includeVaclav: boolean) {
+        let f: IngItem[] = [];
+        if (includeSabrina) {
+            f = f.concat(this.dataSabrina);
+        }
+        if (includeVaclav) {
+            f = f.concat(this.dataVaclav);
+        }
+        return f;
+    }
+
+    public aggregate(from: MonthDate, to: MonthDate, includeSabrina: boolean, includeVaclav: boolean) {
         let monthGroups = [];
         let included = [];
         let excluded = [];
 
-        let f = [];
-        if (includeSabrina) {
-            f = f.concat(DataS.data);
-        }
-        if (includeVaclav) {
-            f = f.concat(DataV.data);
-        }
+        let allItems = this.getPersonsData(includeSabrina, includeVaclav);
 
-        let vts = <IngItem[]>f;
+        let majorCategories = this.majorSplit(allItems);
+        console.log(majorCategories);
+
+        let vts = allItems;
 
         let vgs = IngParser.getMonthsResults(vts, from, to);
         vgs.forEach((vg) => {
@@ -88,7 +143,7 @@ export class RealExpensesCalculator {
         return res;
     }
 
-    private static filter(item: IngItem) {
+    private filter(item: IngItem) {
 
         if (item.account === "hcc fuer fa offenbach am main") {
             return false;
@@ -159,7 +214,7 @@ export class ExpensesGrouper {
 
             let caa = new CategoryGroupedItems(); {
                 caa.catName = cat.name,
-                caa.categoryId = categoryId;
+                    caa.categoryId = categoryId;
                 caa.items = [];
             };
             this.cats.push(caa);
@@ -222,7 +277,7 @@ export class FilterMatch {
         ["NR7153322028 EINDHOVEN NL KAUFUMSATZ 19.07 205205", 20],
         ["NR7153322028 DUESSELDORF KAUFUMSATZ 17.07 172738", 18],
         ["NR7153322028 ANTWERPEN BE KAUFUMSATZ 22.07 140511", 18],
-        ["Wie besprochen", 0],        
+        ["Wie besprochen", 0],
         ["NR7153322028 FRANKFURT KAUFUMSATZ 25.08 093447", 21],
         // ["", 20],
         // ["", 20],
@@ -373,7 +428,7 @@ export class FilterMatch {
                     contains: "Detlef Niesser"
                 },
 
-                
+
             ]
 
         },
@@ -439,7 +494,7 @@ export class FilterMatch {
                 },
 
 
-                
+
 
             ]
 
@@ -538,7 +593,7 @@ export class FilterMatch {
                 },
 
 
-                
+
             ]
 
         },
@@ -574,7 +629,7 @@ export class FilterMatch {
                     contains: "MONTE MARE SAGT DANKE"
                 },
 
-                
+
 
             ]
         },
@@ -673,7 +728,7 @@ export class FilterMatch {
                     contains: "MCDONALD"
                 },
 
-                   
+
             ]
         },
         //Holidays
@@ -802,8 +857,8 @@ export class FilterMatch {
                     propName: "usage",
                     contains: "BARGELDAUSZAHLUNG"
                 },
-                
-                
+
+
             ]
 
         },

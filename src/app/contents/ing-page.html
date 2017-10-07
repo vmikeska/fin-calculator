@@ -1,20 +1,14 @@
-
-<input type="file" (change)="readSingleFile($event)" />
-
-
-
-
-<div *ngIf="lastLoadedItems">
-
+<div class="" *ngIf="!selectedPersonId">
     <div>Upload to person:</div>
     <div>
-            <span class="lbtn" (click)="uploadToPerson('sabrina')">Sabrina</span>
-            <br>
-            <br>
-            <br>
-            <span class="lbtn" (click)="uploadToPerson('vaclav')">Vaclav</span>
+        <span class="lbtn" (click)="selectPerson(1)">Sabrina</span>
+        <br>
+        <br>
+        <br>
+        <span class="lbtn" (click)="selectPerson(2)">Vaclav</span>
     </div>
+</div>
 
-    
-
+<div *ngIf="selectedPersonId">
+    <input type="file" (change)="readSingleFile($event)" />
 </div>

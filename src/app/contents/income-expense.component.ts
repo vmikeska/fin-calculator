@@ -7,7 +7,7 @@ import * as _ from 'lodash';
 import { IngParser, TransactionType, IngItem } from "../ing-parser";
 import { DataS } from "../dataSabrina";
 import { DataV } from "../dataVaclav";
-import { RealExpensesCalculator } from "../RealExpensesCalculator";
+import { RealExpensesCalculatorService } from '../real-expenses-calculator.service';
 
 @Component({
     selector: 'income-expense',
@@ -15,7 +15,7 @@ import { RealExpensesCalculator } from "../RealExpensesCalculator";
 })
 
 export class IncomeExpenseComponent implements OnInit {
-    constructor() { }
+    constructor(private _calcSvc: RealExpensesCalculatorService) { }
 
     ngOnInit() {
         let from: MonthDate = { month: 8, year: 2016 };
@@ -45,13 +45,14 @@ export class IncomeExpenseComponent implements OnInit {
         })
 
      
-        let realRes = RealExpensesCalculator.aggregate(from, to, true, true);
+        // let realRes = this._calcSvc.aggregate(from, to, true, true);
 
-        let realData = { data: [], label: 'Real Expenses (V+S)' };
+        // let realData = { data: [], label: 'Real Expenses (V+S)' };
 
-        realData.data = _.map(realRes.monthGroups, (i) => { return i.totalAmount });
+        // realData.data = _.map(realRes.monthGroups, (i) => { return i.totalAmount });
 
-        this.lineChartData = [expensesData, incomesData, realData];
+        this.lineChartData = [expensesData, incomesData, ];
+        //realData
     }
 
 

@@ -1,11 +1,11 @@
 
 import { Component, OnInit } from '@angular/core';
 import { Subject } from "rxjs/Subject";
-import { IngParser, TransactionType } from "../ing-parser";
+import { IngParser, TransactionType, IngItem } from "../ing-parser";
 
 import * as _ from 'lodash';
 import { Data, MonthDate } from "../data";
-import { ApiCommService } from '../api-comm.service';
+import { ExpensesDataService } from '../expenses-data.service';
 
 @Component({
     selector: 'ing-page',
@@ -15,34 +15,73 @@ import { ApiCommService } from '../api-comm.service';
 export class IngPageComponent
     implements OnInit {
 
-    constructor(private _apiComm: ApiCommService) { }
+    constructor(private _expensesDataSvc: ExpensesDataService) { }
 
     // console.log(_.uniq(_.map(textItems, (i) => {return i.transactionText;})));
     ngOnInit() {
         this.newFileLoaded.subscribe((text) => {
+
             let textItems = IngParser.parseText(text);
-            let objItems = IngParser.parseItems(textItems);
+            let parsedItems = IngParser.parseItems(textItems, this.selectedPersonId);
 
-            this.lastLoadedItems = objItems;
+            let validatedItems = _.filter(parsedItems, (i) => {
+                if (!i.account) {
+                    return false;
+                }
 
-            //this shows it on the page
-            // let jsonStr = JSON.stringify(objItems, null, "\t");
-            // let cont = document.getElementById("content");
-            // cont.innerText = jsonStr;            
+                return true;
+            })
+
+            this.syncItems(validatedItems, this.selectedPersonId);
         })
     }
 
-    public lastLoadedItems;
+    private async syncItems(newItems: IngItem[], personId: number) {
+        let oldItems = await this._expensesDataSvc.getAllAsync();
+        let oldItemsPerson = _.filter(oldItems, { personId: personId });
 
-    public uploadToPerson(person: string) {
-        //"sabrina"/"vaclav"            
+        if (oldItemsPerson.length === 0) {
+            this._expensesDataSvc.postAsync(newItems);
+        } else {            
+            let lastOldDataItem = _.maxBy(oldItemsPerson, "paidDate");
+            let lastOldDate = lastOldDataItem.paidDate;
+            let dateToTakeDataToCompare = lastOldDate.clone().add(-10, "days");
 
-        let res = {
-            person: person,
-            items: this.lastLoadedItems
-        };
+            let newItemsToCompare = _.filter(newItems, (newItem) => {
+                let qualifiedToCompare = newItem.paidDate.isAfter(dateToTakeDataToCompare);
+                return qualifiedToCompare;
+            })
 
-        this._apiComm.apiPostAsync("real-expenses", res);
+            let newItemsToSave = _.filter(newItemsToCompare, (i) => {
+
+                let foundItem = _.find(oldItemsPerson, { usage: i.usage, account: i.account });
+                if (foundItem) {
+                    return false;
+                }
+
+                return true;
+            });
+
+            console.log(newItemsToSave);
+
+            console.log("last old")
+            console.log(lastOldDataItem);
+
+            let firstNew = _.minBy(newItemsToSave, "paidDate");
+
+            console.log("first new")
+            console.log(firstNew);
+
+            this._expensesDataSvc.postAsync(newItemsToSave);
+        }
+    }
+
+    public selectedPersonId = null;
+
+    public selectPerson(personId) {
+        this.selectedPersonId = personId;
+        //sabrina = 1
+        //vaclav = 2
     }
 
     public newFileLoaded = new Subject<string>();

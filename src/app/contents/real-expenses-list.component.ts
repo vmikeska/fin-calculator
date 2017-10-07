@@ -7,7 +7,8 @@ import * as _ from 'lodash';
 import * as moment from 'moment';
 import { DataS } from "../dataSabrina";
 import { DataV } from "../dataVaclav";
-import { RealExpensesCalculator, ExpensesGrouper, CategoryGroupedItems } from "../RealExpensesCalculator";
+import { RealExpensesCalculatorService, CategoryGroupedItems, ExpensesGrouper } from '../real-expenses-calculator.service';
+
 
 @Component({
     selector: 'real-expenses-list',
@@ -15,28 +16,30 @@ import { RealExpensesCalculator, ExpensesGrouper, CategoryGroupedItems } from ".
 })
 
 export class RealExpensesListComponent implements OnInit {
-    constructor() { }
+    constructor(private _calcSvc: RealExpensesCalculatorService) {
+        this._calcSvc.onDataLoaded.subscribe(() => {
+            this.refreshData();
+        });
+    }
 
     public monthGroups: GroupedItems[] = [];
 
     public included: IngItem[];
-    
+
 
     public includeSabrina = true;
     public includeVaclav = true;
 
     ngOnInit() {
-
-        this.refreshData();
-
+        this._calcSvc.loadDataAsync();        
     }
 
-    private refreshData() {
+    private async refreshData() {
 
         let from: MonthDate = { month: 9, year: 2016 };
-        let to: MonthDate = { month: 8, year: 2017 };
+        let to: MonthDate = { month: 9, year: 2017 };
 
-        let res = RealExpensesCalculator.aggregate(from, to, this.includeSabrina, this.includeVaclav);
+        let res = this._calcSvc.aggregate(from, to, this.includeSabrina, this.includeVaclav);
 
         this.monthGroups = res.monthGroups;
         this.spentTotal = res.spentTotal;
@@ -71,7 +74,7 @@ export class RealExpensesListComponent implements OnInit {
         this.leftoversTotal = Math.floor(_.sumBy(cats.uncategoriezed, "amount"));
 
         this.included = cats.uncategoriezed;
-         
+
         return false;
     }
 

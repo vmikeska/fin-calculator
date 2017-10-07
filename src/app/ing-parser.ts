@@ -39,26 +39,17 @@ export class IngParser {
         return joined;
     };
 
-    // private static replaceText(inText, target, replacer) {
-    //     let outText = _.replace(inText, new RegExp(target, "g"), replacer);
-    //     return outText;
-    // }
-
-    public static parseItems(items: IngItemOrig[]) {
+    public static parseItems(items: IngItemOrig[], personId: number) {
         let ois = _.map(items, (i) => {
 
             let paidDate = moment(i.paidDate, "DD.MM.YYYY");
             let monthDate: MonthDate = { month: paidDate.month() + 1, year: paidDate.year() }
             let transType = this.parseTransactionType(i.transactionText);
 
-            if (i.account === "Oliver Melzer") {
-                let a = "a";
-            }
-
             let oi: IngItem = {
                 paidDate: paidDate,
                 accountedDate: moment(i.accountedDate, "DD.MM.YYYY"),
-                
+                personId: personId,
                 date: monthDate,
 
                 account: this.trim(i.account),
@@ -179,6 +170,7 @@ export class GroupedIngItems {
 }
 
 export class IngItem {
+    personId: number;
     paidDate: moment.Moment;
     accountedDate: moment.Moment;
     date: MonthDate;
